@@ -83,14 +83,14 @@ Text: is so much fun
 You can also render Mustache using the Kirby Tag.
 
 ```
-(mustache: example data: example.json dump: false)
-is the same as
 (mustache: example)
+or with data from json and dumping
+(mustache: example data: example.json dump: false)
 ```
 
 ## Advanced Usage
 
-Using the `$page->mustache()` once might not be enough for complex layouts. Consider using the global helper function `mustache(...)` instead passing the name of template, `$page` and data-array as well as other [Mustache Tags](https://github.com/bobthecow/mustache.php/wiki/Mustache-Tags).
+Using the `$page->mustache()` once might not be enough for complex layouts. Consider using the global helper function `mustache(...)` instead passing the name of template and data-array. As well as using other [Mustache Tags](https://github.com/bobthecow/mustache.php/wiki/Mustache-Tags) in your Mustache template.
 
 **dishes.mustache**
 ```html
