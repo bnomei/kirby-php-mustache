@@ -35,20 +35,20 @@ $ git submodule add https://github.com/bnomei/kirby-php-mustache.git site/plugin
 
 ## Good and Bad
 
-Mustache is logicless. Given you prepare your data well using [Kirby Page Controller](https://getkirby.com/docs/developer-guide/advanced/controllers) and/or [Page Models](https://getkirby.com/docs/developer-guide/advanced/models) its quiet simple to use. It's has caching but it is not as fast as raw PHP or [Blade](https://github.com/pedroborges/kirby-blade-template). Using [Mustache Partials](https://github.com/bobthecow/mustache.php/wiki/Mustache-Tags#partials) it can be used for [Atomic Design](http://bradfrost.com/blog/post/atomic-web-design/) and might be an easier alternative to more advanced solutions like Kirby [Patters Plugin](https://github.com/getkirby-plugins/patterns-plugin) and [Modules Plugin](https://github.com/getkirby-plugins/modules-plugin). Mustache is similar to [Handlebars](http://handlebarsjs.com/).
+Mustache is logicless. Given you prepare your data well using [Kirby Page Controller](https://getkirby.com/docs/developer-guide/advanced/controllers) and/or [Page Models](https://getkirby.com/docs/developer-guide/advanced/models) its quiet simple to use. It has caching but it is not as fast as raw PHP or [Blade](https://github.com/pedroborges/kirby-blade-template). Using [Mustache Partials](https://github.com/bobthecow/mustache.php/wiki/Mustache-Tags#partials) it can be used for [Atomic Design](http://bradfrost.com/blog/post/atomic-web-design/) and might be an easier alternative to more advanced solutions like Kirby [Patters Plugin](https://github.com/getkirby-plugins/patterns-plugin) and [Modules Plugin](https://github.com/getkirby-plugins/modules-plugin). Mustache is similar to [Handlebars](http://handlebarsjs.com/).
 
 ## Basic Usage
 
-Templates written in Mustache can be parsed with [PHP on your server](https://mustache.github.io/) or even with [Javascript by the client](https://github.com/janl/mustache.js). Class are named using [BEM](http://getbem.com/introduction/) but that is just my personal favourite. Please note that this plugin can make the `$page` and `$site` objects available via settings.
+Templates written in Mustache can be parsed with [PHP on your server](https://mustache.github.io/) or even with [Javascript by the client](https://github.com/janl/mustache.js). HTML Classes in examples are named using [BEM](http://getbem.com/introduction/) but that is just my personal favourite. Please note that this plugin can make the `$page` and `$site` objects available via settings.
 
-** site/config/config.php **
+**site/config/config.php**
 ```php
 c::set('plugin.mustache.helpers.page', true);
 // $page object in mustache
 // will merge $page->content()->toArray() with additional data
 ```
 
-** site/templates/example.mustache **
+**site/templates/example.mustache**
 ```html
 <div class="c-example">
   <header class="c-example__title"><h1>{{ page.title }}</h1></header>
@@ -56,21 +56,21 @@ c::set('plugin.mustache.helpers.page', true);
 </div>
 ```
 
-** content/example/example.txt **
+**content/example/example.txt**
 ```yml
 Title: Templating
 ----
 Text: is so much fun
 ```
 
-** site/templates/example.php **
+**site/templates/example.php**
 ```php
   c::set('plugin.mustache.helpers.page', true);
   echo $page->mustache(); // or...
   // mustache('example', $page->content()->toArray());
 ```
 
-** html output **
+**html output**
 ```html
 <div class="c-example">
   <header class="c-example__title"><h1>Templating</h1></header>
@@ -92,7 +92,7 @@ is the same as
 
 Using the `$page->mustache()` once might not be enough for complex layouts. Consider using the global helper function `mustache(...)` instead passing the name of template, `$page` and data-array as well as other [Mustache Tags](https://github.com/bobthecow/mustache.php/wiki/Mustache-Tags).
 
-** dishes.mustache **
+**dishes.mustache**
 ```html
 {{# missing }}
 <header>Never shown</header>
@@ -104,7 +104,7 @@ Using the `$page->mustache()` once might not be enough for complex layouts. Cons
 </ul>
 ```
 
-** dish.mustache **
+**dish.mustache**
 ```html
 <li class="c-dishes__item">{{ name }}</li>
 ```
@@ -120,6 +120,7 @@ mustache('dishes', [
 ]);
 ```
 
+**dishes.json**
 ```json
 {
   "template": "dishes",
@@ -144,13 +145,14 @@ For dumping you need to include the css and js (and jQuery/Zepto) this plugin pr
 - example.json : (optional) json formated data-array
 - example.css : (optional) css of component
 
-** your header/footer snippet **
+**your header/footer snippet**
 ```
 echo css('assets/plugins/kirby-php-mustache/main.css');
 // after jQuery/Zepto
 echo js('assets/plugins/kirby-php-mustache/main.js');
 ```
 
+**in any template**
 ```php
 $returning = true;
 $dumping = true;
