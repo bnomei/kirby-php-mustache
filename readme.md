@@ -109,6 +109,7 @@ Using the `$page->mustache()` once might not be enough for complex layouts. Cons
 <li class="c-dishes__item">{{ name }}</li>
 ```
 
+**any php template**
 ```php
 mustache('dishes', [
   'dishes' => [
