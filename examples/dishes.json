@@ -1,0 +1,11 @@
+{
+  "template": "dishes",
+  "data": {
+    "missing": true,
+    "dishes": [
+      {"name": "Agemono"},
+      {"name": "Yakimono"},
+      {"name": "Nabemono"}
+    ]
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "name": "kirby-php-mustache",
+  "description": "Kirby CMS Plugin to use logicless templates with PHP Mustache.",
+  "version": "0.0.1",
+  "type": "kirby-plugin",
+  "license": "MIT"
+}
