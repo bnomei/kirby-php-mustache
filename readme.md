@@ -164,6 +164,20 @@ foreach(json_decode(file_get_contents($route), true) as $template => $name) {
 }
 ```
 
+## Not using Files for Templates
+
+By default this plugin assumes you store your templates in files. But you can also use a closure instead of a template filename with the `mustache(...)` helper function. This will trigger the Mustache Engine StringLoader.
+
+```php
+$dynTemplate = "{{# a }} {{ b }} Scream,{{/ a }} for Ice Cream!";
+mustache(function() use ($dynTemplate) {
+  return (string) $dynTemplate;
+}, ['a' => [
+  ['b'=>'I'], ['b'=>'You'], ['b'=>'We all']]
+]);
+// I Scream, You Scream, We all Scream, for Ice Cream!
+```
+
 ## Setting
 
 You can set these in your `site/config/config.php`.

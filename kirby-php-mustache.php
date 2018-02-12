@@ -12,13 +12,19 @@ class KirbyPHPMustache {
 	static private 	$config = [];      // mustache engine
 	static private 	$helpers = [];     // mustache engine global vars
 	static private 	$singleton = null;
+  static private 	$singletonString = null;
 
   static private function is_closure($t) {
       return is_object($t) && ($t instanceof Closure);
   }
 
-  static private function instance() {
-    if(self::$singleton) return self::$singleton;
+  static private function instance($stringLoader = false) {
+    if($stringLoader && self::$singletonString) {
+      return self::$singletonString;
+    }
+    else if(!$stringLoader && self::$singleton) {
+      return self::$singleton;
+    }
 
 		///////////////////////////////////////
 		// PLUGIN SETTINGS
@@ -77,11 +83,16 @@ class KirbyPHPMustache {
 		 		return $value; // do not escape! see https://github.com/bobthecow/mustache.php/wiki
 			}
 		);
+
+    // String Loader
+    self::$singletonString = new Mustache_Engine(self::$config);
+
+    // File Loader
 		self::$config['loader'] = new Mustache_Loader_FilesystemLoader(self::$settings['templates_dir']);
 		self::$config['partials_loader'] = new Mustache_Loader_FilesystemLoader(self::$settings['templates_partials_dir']);
-
 		self::$singleton = new Mustache_Engine(self::$config);
-		return self::$singleton;
+
+		return $stringLoader ? self::$singletonString : self::$singleton;
 	}
 
 	static public function ecco($template, $data = null, $dump = false) {
@@ -90,11 +101,12 @@ class KirbyPHPMustache {
 
 	static public function renderPage($page, $template = null, $data = null, $dump = false) {
 		if(!$page || !is_a($page, 'Page')) return false;
-		if(!$template) $template = $page->intendedTemplate();
+		if(!$template) $template = (string) $page->intendedTemplate();
     if(is_string($data)) {
-      $file = self::readFile($data);
-      $template = !$template ? a::get($file, 'template', null) : $template;
-      $data = a::get($file, 'data', []);
+      if($file = self::readFile($data)) {
+        $template = !$template ? a::get($file, 'template', null) : $template;
+        $data = a::get($file, 'data', []);
+      }
     }
     if($data == null) $data = [];
 
@@ -107,18 +119,26 @@ class KirbyPHPMustache {
   static public function render($template, $data = null, $dump = false) {
     $out = false;
     $ext = '';
+    $stringLoader = false;
+
+    if(is_callable($template)) {
+      $template = trim($template());
+      $stringLoader = true;
+    }
 
     if(is_string($data)) {
-      $file = self::readFile($data);
-      $template = !$template ? a::get($file, 'template', null) : $template;
-      $data = a::get($file, 'data', []);
+      if($file = self::readFile($data)) {
+        $template = !$template ? a::get($file, 'template', null) : $template;
+        $data = a::get($file, 'data', []);
+      }
     }
     if($data == null) $data = [];
 
-		if($mustache = self::instance()){
-      $ext = '.' . self::$settings['extension'];
-
-      if(!str::endsWith($template, $ext)) $template .= $ext;
+		if($mustache = self::instance($stringLoader)){
+      if(!$stringLoader) {
+        $ext = '.' . self::$settings['extension'];
+        if(!str::endsWith($template, $ext)) $template .= $ext;
+      }
 			$out = $mustache->render(
 				$template,
 				$data
