@@ -121,7 +121,7 @@ class KirbyPHPMustache {
     $ext = '';
     $stringLoader = false;
 
-    if(is_callable($template)) {
+    if(!is_string($template) && is_callable($template)) {
       $template = trim($template());
       $stringLoader = true;
     }
